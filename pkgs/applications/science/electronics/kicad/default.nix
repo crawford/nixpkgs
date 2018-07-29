@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     -DKICAD_SKIP_BOOST=ON
     -DKICAD_BUILD_VERSION=${version}
     -DKICAD_REPO_NAME=stable
+    -DCMAKE_CXX_FLAGS=-I${python27Packages.wxPython}/include/wx-3.0
   '';
 
   enableParallelBuilding = true; # often fails on Hydra: fatal error: pcb_plot_params_lexer.h: No such file or directory
