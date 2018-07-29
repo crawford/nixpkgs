@@ -1,24 +1,29 @@
-{ stdenv, fetchurl, cmake, libGLU_combined, wxGTK, zlib, libX11, gettext, glew, cairo, curl, openssl, boost, pkgconfig, doxygen }:
+{ stdenv, fetchurl, cmake, libGLU_combined, wxGTK, zlib, libX11, gettext, glew, cairo, curl, openssl, boost, pkgconfig, doxygen, glm, opencascade, swig, python27Packages }:
 
 stdenv.mkDerivation rec {
   name = "kicad-${version}";
-  series = "4.0";
-  version = "4.0.7";
+  series = "5.0";
+  version = "5.0.0";
 
   srcs = [
     (fetchurl {
       url = "https://code.launchpad.net/kicad/${series}/${version}/+download/kicad-${version}.tar.xz";
-      sha256 = "1hgxan9321szgyqnkflb0q60yjf4yvbcc4cpwhm0yz89qrvlq1q9";
+      sha256 = "17nqjszyvd25wi6550j981whlnb1wxzmlanljdjihiki53j84x9p";
     })
 
     (fetchurl {
-      url = "http://downloads.kicad-pcb.org/libraries/kicad-library-${version}.tar.gz";
-      sha256 = "1azb7v1y3l6j329r9gg7f4zlg0wz8nh4s4i5i0l9s4yh9r6i9zmv";
+      url = "https://github.com/KiCad/kicad-symbols/archive/${version}.tar.gz";
+      sha256 = "09d8rmzssb0qfiicsh2wjg4yb5jjcb1nj2ib9ks8qhysm3zk3y8b";
     })
 
     (fetchurl {
-      url = "http://downloads.kicad-pcb.org/libraries/kicad-footprints-${version}.tar.gz";
-      sha256 = "08qrz5zzsb5127jlnv24j0sgiryd5nqwg3lfnwi8j9a25agqk13j";
+      url = "https://github.com/KiCad/kicad-footprints/archive/${version}.tar.gz";
+      sha256 = "19p20j8kgajmq8idy5wcxlx6x5h73aswkrd55b87avmn8c827h16";
+    })
+
+    (fetchurl {
+      url = "https://github.com/KiCad/kicad-packages3D/archive/${version}.tar.gz";
+      sha256 = "0nfn4353hp7qyim5q08djm422aibx703h92b8ycwc7kfi3xhv6wf";
     })
   ];
 
@@ -28,12 +33,13 @@ stdenv.mkDerivation rec {
     -DKICAD_SKIP_BOOST=ON
     -DKICAD_BUILD_VERSION=${version}
     -DKICAD_REPO_NAME=stable
+    -DKICAD_SPICE=OFF
   '';
 
   enableParallelBuilding = true; # often fails on Hydra: fatal error: pcb_plot_params_lexer.h: No such file or directory
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libGLU_combined wxGTK zlib libX11 gettext glew cairo curl openssl boost doxygen ];
+  buildInputs = [ cmake libGLU_combined wxGTK zlib libX11 gettext glew cairo curl openssl boost doxygen glm opencascade swig python27Packages.python python27Packages.wxPython ];
 
   # They say they only support installs to /usr or /usr/local,
   # so we have to handle this.
