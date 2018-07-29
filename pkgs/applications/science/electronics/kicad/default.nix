@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libGLU_combined, wxGTK, zlib, libX11, gettext, glew, cairo, curl, openssl, boost, pkgconfig, doxygen, glm, opencascade, swig, python27Packages }:
+{ stdenv, fetchurl, cmake, libGLU_combined, wxGTK, zlib, libX11, gettext, glew, cairo, curl, openssl, boost, pkgconfig, doxygen, glm, libngspice, opencascade, swig, python27Packages }:
 
 stdenv.mkDerivation rec {
   name = "kicad-${version}";
@@ -33,13 +33,12 @@ stdenv.mkDerivation rec {
     -DKICAD_SKIP_BOOST=ON
     -DKICAD_BUILD_VERSION=${version}
     -DKICAD_REPO_NAME=stable
-    -DKICAD_SPICE=OFF
   '';
 
   enableParallelBuilding = true; # often fails on Hydra: fatal error: pcb_plot_params_lexer.h: No such file or directory
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libGLU_combined wxGTK zlib libX11 gettext glew cairo curl openssl boost doxygen glm opencascade swig python27Packages.python python27Packages.wxPython ];
+  buildInputs = [ cmake libGLU_combined wxGTK zlib libX11 gettext glew cairo curl openssl boost doxygen glm libngspice opencascade swig python27Packages.python python27Packages.wxPython ];
 
   # They say they only support installs to /usr or /usr/local,
   # so we have to handle this.
