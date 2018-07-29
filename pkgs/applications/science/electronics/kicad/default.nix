@@ -47,13 +47,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's,/usr/local/kicad,'$out,g common/gestfich.cpp
   '';
 
-  postUnpack = ''
-    pushd $(pwd)
-  '';
-
   postInstall = ''
-    popd
-
     pushd kicad-library-*
     cmake -DCMAKE_INSTALL_PREFIX=$out
     make $MAKE_FLAGS
@@ -65,7 +59,6 @@ stdenv.mkDerivation rec {
     cp -R *.pretty $out/share/kicad/modules/
     popd
   '';
-
 
   meta = {
     description = "Free Software EDA Suite";
